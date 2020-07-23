@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mad Lib</title>
+    </head>
+    <body>
+        <h1>{{partOfSpeech}}</h1>
+        <form action="/" method="POST">
+            {% csrf_token %}
+            {{form|safe}}
+            {{error|safe}}
+            <h1>{{title}}</h1>
+            <p>{{story}}</p>
+            <input type="submit" value="Restart Game" name="restart"/>
+        </form>
+    </body>
+</html>
