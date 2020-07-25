@@ -1,19 +1,22 @@
 import re
-import requests
+import json
+from random import randint
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render
 
 responses = []
-madlibAPI = requests.get("http://madlibz.herokuapp.com/api/random")
-questions = madlibAPI.json()["blanks"]
-story = madlibAPI.json()["value"]
-title = madlibAPI.json()["title"]
+questions = []
+story = []
+title = ''
 form = "<input type='text' name='response'><input type='submit'><br>"
 error = "<br><strong style='color: red;'>Please type something into the textfield</strong>"
 
 def madlib(request):
-    global questions, responses, story, title, form
+    global questions, responses, story, title
+    print(request.method)
+    print(request.POST.__contains__("response"))
+    print(request.POST.__getitem__("response") if request.POST.__contains__("response") else False)
     if request.POST.__contains__("restart") or (request.method == "GET" and len(responses) == 0):
         newGame()
         return render(
@@ -23,6 +26,7 @@ def madlib(request):
                 'partOfSpeech': questions[0]
             }
         )
+    
     if request.method == "POST" and request.POST.__contains__("response") and len(request.POST.__getitem__("response").strip()) != 0:
         responses.append(request.POST.__getitem__("response")[0])
         if len(responses) == len(questions):
@@ -62,9 +66,13 @@ def madlib(request):
     )
         
 def newGame():
-    global responses, madlibAPI, questions, story, title
+    global responses, questions, story, title
     responses = []
-    madlibAPI = requests.get("http://madlibz.herokuapp.com/api/random")
-    questions = madlibAPI.json()["blanks"]
-    story = madlibAPI.json()["value"]
-    title = madlibAPI.json()["title"]
+    with open("madlib.json") as f:
+        madlibAPI =  json.load(f)
+    madlibAPI = madlibAPI["templates"]
+    randomNum = randint(0, len(madlibAPI)-1)
+    madlib = madlibAPI[randomNum]
+    questions = madlib["blanks"]
+    story = madlib["value"]
+    title = madlib["title"]
