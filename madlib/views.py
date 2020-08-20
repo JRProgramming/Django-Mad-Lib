@@ -14,10 +14,7 @@ error = "<br><strong style='color: red;'>Please type something into the textfiel
 
 def madlib(request):
     global questions, responses, story, title
-    print(request.method)
-    print(request.POST.__contains__("response"))
-    print(request.POST.__getitem__("response") if request.POST.__contains__("response") else False)
-    if request.POST.__contains__("restart") or (request.method == "GET" and len(responses) == 0):
+    if request.POST.__contains__("restart") or len(questions) == 0:
         newGame()
         return render(
             request,
