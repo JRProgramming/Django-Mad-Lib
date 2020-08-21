@@ -10,5 +10,4 @@ def newGame():
     questions = madlib["blanks"]
     story = madlib["value"]
     title = madlib["title"]
-    output = {'responses': [], 'questions': questions, 'story': story, 'title': title}
-    return output
+    return { 'responses': [], 'questions': questions, 'story': story, 'title': title }
