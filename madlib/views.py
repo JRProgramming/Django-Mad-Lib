@@ -1,6 +1,7 @@
 import re
 import json
-from madlib.src.newgame import newGame
+from madlib.src.newGame import newGame
+from madlib.src.generateStory import generateStory
 from random import randint
 from datetime import datetime
 from django.http import HttpResponse
@@ -16,11 +17,8 @@ error = "<br><strong style='color: red;'>Please type something into the textfiel
 def madlib(request):
     global questions, responses, story, title
     if request.POST.__contains__("restart") or len(questions) == 0:
-        output = newGame()
-        # We are going to have to stick with this for now until I find a more effective solution
-        questions = output['questions']
-        story = output['story']
-        title = output['title']
+        game = newGame()
+        questions, story, title = game.values()
         return render(
             request,
             'madlib/index.html', {
@@ -32,15 +30,7 @@ def madlib(request):
     if request.method == "POST" and request.POST.__contains__("response") and len(request.POST.__getitem__("response").strip()) != 0:
         responses.append(request.POST.__getitem__("response")[0])
         if len(responses) == len(questions):
-            storyString = ""
-            for index, question in enumerate(story):
-                if index < len(responses):
-                    if index != 0:
-                        responses[index] = responses[index].lower()
-                    storyString += question + responses[index]
-                else: 
-                    if index != len(story) - 1:
-                        storyString += question
+            storyString = generateStory(responses, story)
             return render(
                 request,
                 'madlib/index.html',

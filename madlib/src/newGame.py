@@ -7,8 +7,7 @@ story = []
 title = ''
 
 def newGame():
-    global responses, questions, story, title
-    responses = []
+    global questions, story, title
     with open("madlib.json") as f:
         madlibAPI = json.load(f)
     madlibAPI = madlibAPI["templates"]
@@ -17,8 +16,5 @@ def newGame():
     questions = madlib["blanks"]
     story = madlib["value"]
     title = madlib["title"]
-    output = {}
-    output['questions'] = questions
-    output['story'] = story
-    output['title'] = title
+    output = {'questions': questions, 'story': story, 'title': title}
     return output
