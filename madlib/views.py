@@ -1,5 +1,6 @@
 import re
 import json
+from madlib.src.newgame import newGame
 from random import randint
 from datetime import datetime
 from django.http import HttpResponse
@@ -15,7 +16,11 @@ error = "<br><strong style='color: red;'>Please type something into the textfiel
 def madlib(request):
     global questions, responses, story, title
     if request.POST.__contains__("restart") or len(questions) == 0:
-        newGame()
+        output = newGame()
+        # We are going to have to stick with this for now until I find a more effective solution
+        questions = output['questions']
+        story = output['story']
+        title = output['title']
         return render(
             request,
             'madlib/index.html', {
@@ -61,15 +66,3 @@ def madlib(request):
             'partOfSpeech': questions[len(responses)]
         }
     )
-        
-def newGame():
-    global responses, questions, story, title
-    responses = []
-    with open("madlib.json") as f:
-        madlibAPI =  json.load(f)
-    madlibAPI = madlibAPI["templates"]
-    randomNum = randint(0, len(madlibAPI)-1)
-    madlib = madlibAPI[randomNum]
-    questions = madlib["blanks"]
-    story = madlib["value"]
-    title = madlib["title"]
