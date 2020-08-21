@@ -18,7 +18,7 @@ def madlib(request):
     global questions, responses, story, title
     if request.POST.__contains__("restart") or len(questions) == 0:
         game = newGame()
-        questions, story, title = game.values()
+        responses, questions, story, title = game.values()
         return render(
             request,
             'madlib/index.html', {

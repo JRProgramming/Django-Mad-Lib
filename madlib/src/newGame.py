@@ -1,13 +1,7 @@
 import json
 from random import randint
 
-responses = []
-questions = []
-story = []
-title = ''
-
 def newGame():
-    global questions, story, title
     with open("madlib.json") as f:
         madlibAPI = json.load(f)
     madlibAPI = madlibAPI["templates"]
@@ -16,5 +10,5 @@ def newGame():
     questions = madlib["blanks"]
     story = madlib["value"]
     title = madlib["title"]
-    output = {'questions': questions, 'story': story, 'title': title}
+    output = {'responses': [], 'questions': questions, 'story': story, 'title': title}
     return output
