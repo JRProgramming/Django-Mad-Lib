@@ -10,7 +10,6 @@ error = "<br><strong style='color: red;'>Please type something into the textfiel
 htmlFile = "madlib/index.html"
 madLibLists = []
 
-
 def madlib(request):
     # Needs to be initialized in order to be used, even if it is not the correct one
     madLibGame = madLibLists[0] if len(madLibLists) > 0 else None
