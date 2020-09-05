@@ -1,6 +1,6 @@
 import re
 import json
-from madlib.src.MadLib import MadLib
+from MadLib.src.MadLib import MadLib
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render

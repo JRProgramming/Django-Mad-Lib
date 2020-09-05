@@ -14,7 +14,7 @@ class MadLib:
         MadLib.classId += 1
 
     def newGame(self):
-        with open("madlib/src/madlib.json") as f:
+        with open("MadLib/src/MadLib.json") as f:
             madLibJSON = json.load(f)
             madLibSelection = madLibJSON["templates"][randint(0, len(madLibJSON["templates"])-1)]
         self.questions = madLibSelection["blanks"]
