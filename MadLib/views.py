@@ -5,7 +5,7 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render
 
-form = "<input type='text' name='response'><input type='submit'><br>"
+form = "<input type='text' placeholder='Type here' name='response'><input type='submit'><br>"
 error = "<br><strong style='color: red;'>Please type something into the textfield</strong>"
 htmlFile = "madlib/index.html"
 madLibLists = []
