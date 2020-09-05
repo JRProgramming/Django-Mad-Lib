@@ -1,58 +1,67 @@
 import re
 import json
-from madlib.src.newGame import newGame
-from madlib.src.generateStory import generateStory
-from random import randint
+from madlib.src.MadLib import MadLib
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render
 
-responses = []
-questions = []
-story = []
-title = ''
 form = "<input type='text' name='response'><input type='submit'><br>"
 error = "<br><strong style='color: red;'>Please type something into the textfield</strong>"
+htmlFile = "madlib/index.html"
+madLibLists = []
+
 
 def madlib(request):
-    global questions, responses, story, title
-    if request.POST.__contains__("restart") or len(questions) == 0:
-        game = newGame()
-        responses, questions, story, title = game.values()
+    # Needs to be initialized in order to be used, even if it is not the correct one
+    madLibGame = madLibLists[0] if len(madLibLists) > 0 else None
+    if (not request.POST.__contains__("id")):
+        madLibGame = MadLib([], [], [], "", MadLib.classId)
+        madLibLists.append(madLibGame)
+    else:
+        for game in madLibLists:
+            if int(game.id) == int(request.POST.__getitem__("id")):
+                madLibGame = game
+                break
+    if request.POST.__contains__("restart") or len(madLibGame.questions) == 0:
+        madLibGame.newGame()
         return render(
             request,
-            'madlib/index.html', {
+            htmlFile, 
+            {
                 'form': form,
-                'partOfSpeech': questions[0]
+                'partOfSpeech': madLibGame.questions[0],
+                'id': madLibGame.id
             }
         )
-    
     if request.method == "POST" and request.POST.__contains__("response") and len(request.POST.__getitem__("response").strip()) != 0:
-        responses.append(request.POST.__getitem__("response")[0])
-        if len(responses) == len(questions):
-            storyString = generateStory(responses, story)
+        madLibGame.responses.append(request.POST.__getitem__("response")[0])
+        if len(madLibGame.responses) == len(madLibGame.questions):
+            storyString = madLibGame.generateStory(madLibGame.responses, madLibGame.story)
             return render(
                 request,
-                'madlib/index.html',
+                htmlFile,
                 {
-                    'title': title,
-                    'story': storyString
+                    'title': madLibGame.title,
+                    'story': storyString,
+                    'id': madLibGame.id
                 }
             )
         return render(
             request,
-            'madlib/index.html',
+            htmlFile,
             {
                 'form': form,
-                'partOfSpeech': questions[len(responses)]
+                'partOfSpeech': madLibGame.questions[len(madLibGame.responses)],
+                'id': madLibGame.id
             }
         )
     return render(
         request,
-        'madlib/index.html',
+        htmlFile,
         {
             'form': form,
             'error': error,
-            'partOfSpeech': questions[len(responses)]
+            'partOfSpeech': madLibGame.questions[len(madLibGame.responses)],
+            'id': madLibGame.id
         }
     )
