@@ -12,6 +12,10 @@ html, body {
     align-items: center;
     justify-content: center;
 }
+/* Need to respecify width or else the text won't be in the center */
+body {
+    width: 90%;
+}
 h1 {
     font-size: 64px;
 }

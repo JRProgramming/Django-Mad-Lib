@@ -21,14 +21,14 @@ class MadLib:
         self.story = madLibSelection["value"]
         self.title = madLibSelection["title"]
 
-    def generateStory(self, responses, story):
+    def generateStory(self):
         storyString = ""
-        for index, question in enumerate(story):
-            if index < len(responses):
+        for index, question in enumerate(self.story):
+            if index < len(self.responses):
                 if index != 0:
-                    responses[index] = responses[index].lower()
-                storyString += question + responses[index]
+                    self.responses[index] = self.responses[index].lower()
+                storyString += question + self.responses[index]
             else: 
-                if index != len(story) - 1:
+                if index != len(self.story) - 1:
                     storyString += question
         return storyString 

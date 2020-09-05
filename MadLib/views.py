@@ -35,7 +35,7 @@ def madlib(request):
     if request.method == "POST" and request.POST.__contains__("response") and len(request.POST.__getitem__("response").strip()) != 0:
         madLibGame.responses.append(request.POST.__getitem__("response")[0])
         if len(madLibGame.responses) == len(madLibGame.questions):
-            storyString = madLibGame.generateStory(madLibGame.responses, madLibGame.story)
+            storyString = madLibGame.generateStory()
             return render(
                 request,
                 htmlFile,
